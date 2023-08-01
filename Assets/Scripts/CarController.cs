@@ -16,7 +16,6 @@ public class CarController : MonoBehaviour
     private bool IsMovingForward;
     private bool IsMovingBackWard;
 
-    [SerializeField] List<GameObject> visualObjects;
 
     [Header("Inputs")]
     private float gasInput;
@@ -27,18 +26,21 @@ public class CarController : MonoBehaviour
 
     private const int minRequiredRotationSpeed = -2;
     private const int maxRequiredRotationSpeed = 2;
-
-    [SerializeField] private float visualRotationAngleMultiplier;
+    [SerializeField] List<GameObject> visualObjects;
+    [SerializeField] private float visualRotateMultiplier = 15f;
+    [SerializeField] private float visualRotationAngleSpeed;
     [SerializeField] private float accerationRotationRatio;
 
     private float InitAccerationRotation;
+    private float InitVisualRotationMultiplier;
     private Quaternion currentRotation;
     private float currentRotationAngle;
     private bool drifting;
 
     private void Start()
     {
-        InitAccerationRotation = accerationRotationRatio;    
+        InitAccerationRotation = accerationRotationRatio;
+        InitVisualRotationMultiplier = visualRotateMultiplier;    
     }
 
     private void Update()
@@ -54,6 +56,7 @@ public class CarController : MonoBehaviour
         Movement();
         Drifting();
         BodyRotation();
+        VisualRotation();
     }
 
     private void Movement()
@@ -105,18 +108,21 @@ public class CarController : MonoBehaviour
         
         if(currentSpeed >= minRequiredRotationSpeed && currentSpeed <= maxRequiredRotationSpeed)
         {
-            accerationRotationRatio = 0;
+            accerationRotationRatio = 2f;
+            visualRotateMultiplier = 2f;
             return;
         }
 
         if(currentSpeed <= currentSpeed / 2)
         {
             accerationRotationRatio = InitAccerationRotation;
+            visualRotateMultiplier = InitVisualRotationMultiplier;
         }
 
         if(currentSpeed >= currentSpeed / 2)
         {
             accerationRotationRatio = InitAccerationRotation / 2;
+            visualRotateMultiplier = InitVisualRotationMultiplier / 2;
         }
         
     }
@@ -144,46 +150,26 @@ public class CarController : MonoBehaviour
     {
         if(directionInput > 0)
         {
-            if(drifting)
-            {
-                currentRotationAngle = accerationRotationRatio * Time.deltaTime;
-                currentRotation = Quaternion.Euler(0,currentRotationAngle,0);
-                transform.rotation *= currentRotation;
-            }
-            else
-            {
-                currentRotationAngle = accerationRotationRatio * Time.deltaTime;
-                currentRotation = Quaternion.Euler(0,currentRotationAngle,0);
-                transform.rotation *= currentRotation;
-                VisualRotation();
-            }
-            
+            Rotating(1); 
         }
         if(directionInput < 0)
         {
-            if(drifting)
-            {
-                currentRotationAngle = accerationRotationRatio * Time.deltaTime ;
-                currentRotation = Quaternion.Euler(0,-currentRotationAngle,0);
-                transform.rotation *= currentRotation;
-            }
-            else
-            {
-                currentRotationAngle = accerationRotationRatio * Time.deltaTime;
-                currentRotation = Quaternion.Euler(0,-currentRotationAngle,0);
-                transform.rotation *= currentRotation;
-                VisualRotation();
-                
-            }
+            Rotating(-1);
+        }
+
+        void Rotating(float direction)
+        {
+            currentRotationAngle = accerationRotationRatio * Time.deltaTime;
+            currentRotation = Quaternion.Euler(0,direction * currentRotationAngle,0);
+            transform.rotation *= currentRotation;
         }
     }   
 
     private void VisualRotation()
     {
-        float directionMultiplier = 15f;
         foreach (var item in visualObjects)
         {   
-            item.transform.localRotation = Quaternion.Euler(0, Mathf.LerpAngle(item.transform.localEulerAngles.y,(directionInput * directionMultiplier),visualRotationAngleMultiplier), 0);
+            item.transform.localRotation = Quaternion.Euler(0, Mathf.LerpAngle(item.transform.localEulerAngles.y,(directionInput * visualRotateMultiplier),visualRotationAngleSpeed), 0);
             //item.transform.rotation = Quaternion.Lerp(item.transform.rotation,Quaternion.Euler(0,directionMultiplier * directionInput + item.transform.eulerAngles.y,0),  Time.deltaTime);
             //item.transform.eulerAngles = new Vector3(transform.eulerAngles.x,transform.eulerAngles.y + directionMultiplier * directionInput, transform.eulerAngles.z);
             //item.transform.rotation = Quaternion.AngleAxis(directionMultiplier, Vector3.);
@@ -195,7 +181,7 @@ public class CarController : MonoBehaviour
             
             if(directionInput == 0)
             {
-                item.transform.localRotation = Quaternion.Euler(0, Mathf.LerpAngle(item.transform.localEulerAngles.y,0,visualRotationAngleMultiplier), 0);
+                item.transform.localRotation = Quaternion.Euler(0, Mathf.LerpAngle(item.transform.localEulerAngles.y,0,visualRotationAngleSpeed), Time.deltaTime);
             }
         }
 

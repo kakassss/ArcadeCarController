@@ -129,7 +129,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh27752
+  m_Name: pb_Mesh34224
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -301,6 +301,7 @@ GameObject:
   - component: {fileID: 330585544}
   - component: {fileID: 330585547}
   - component: {fileID: 330585548}
+  - component: {fileID: 330585549}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -381,7 +382,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 7
-  m_LocalEulerAnglesHint: {x: 23.3, y: 2.039, z: -0.125}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &330585547
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -459,6 +460,24 @@ MonoBehaviour:
   m_CameraActivatedEvent:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &330585549
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 330585543}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f6d3ff905719c845a4a6404bc4d4162, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  carTransform: {fileID: 0}
+  followSpeed: 2
+  lookSpeed: 5
+  initialCameraPosition: {x: 0, y: 0, z: 0}
+  initialCarPosition: {x: 0, y: 0, z: 0}
+  absoluteInitCameraPosition: {x: 0, y: 0, z: 0}
 --- !u!1 &391658184
 GameObject:
   m_ObjectHideFlags: 0
@@ -29644,7 +29663,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh27822
+  m_Name: pb_Mesh34294
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -31126,7 +31145,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh27796
+  m_Name: pb_Mesh34268
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -31758,7 +31777,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh27784
+  m_Name: pb_Mesh34256
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -32377,7 +32396,8 @@ MonoBehaviour:
   - {fileID: 5104955122731505579}
   - {fileID: 8923487391353430062}
   - {fileID: 4491170008002823938}
-  visualRotationAngleMultiplier: 0.03
+  visualRotateMultiplier: 30
+  visualRotationAngleSpeed: 0.05
   accerationRotationRatio: 120
 --- !u!65 &5297117052485424170
 BoxCollider:
