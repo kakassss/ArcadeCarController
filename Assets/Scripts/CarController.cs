@@ -1,21 +1,23 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class CarController : MonoBehaviour
 {
-    
-    
     [Header("Forward Transform Movement")]
     [SerializeField] private float maxSpeed;
     [SerializeField] private float maxRSpeed;
     [SerializeField] private float movementAccerationRatio;
     [SerializeField] private float slowingRatio;
+    [SerializeField] private float brakeRatioMultiplier;
     [SerializeField] private float driftForceMultiplier;
     private Vector3 movementForce;
+    private float brakeRatio;
     private float currentSpeed = 0f;
+    private float InitMovementAccerationRatio;
     private bool IsMovingForward;
     private bool IsMovingBackWard;
-
+    [SerializeField] private bool IsGrounded;
 
     [Header("Inputs")]
     private float gasInput;
@@ -35,26 +37,30 @@ public class CarController : MonoBehaviour
     private float InitVisualRotationMultiplier;
     private Quaternion currentRotation;
     private float currentRotationAngle;
-    private bool drifting;
 
+    [Header("Grounded")]
+    [SerializeField] private float raycastDistance = 1.0f;
+    [SerializeField] private LayerMask layer;
     private void Start()
     {
         InitAccerationRotation = accerationRotationRatio;
         InitVisualRotationMultiplier = visualRotateMultiplier;    
+        InitMovementAccerationRatio = movementAccerationRatio;
     }
 
     private void Update()
     {
         gasInput = Input.GetAxis("Vertical");
         directionInput = Input.GetAxisRaw("Horizontal");
-        brakeInput = Input.GetAxis("Jump"); 
+        brakeInput = Input.GetAxisRaw("Jump");
 
         ClampCurrentMaxSpeed();
         CalculateRotationBasedOnCurrentSpeed();
+        ReduceSpeedAndRotationWhileOnAir();
         CalculateNoGasInputSlowDown();
         SpeedUpForwardBackward();
         Movement();
-        Drifting();
+        Braking();
         BodyRotation();
         VisualRotation();
     }
@@ -63,6 +69,20 @@ public class CarController : MonoBehaviour
     {
         movementForce = currentSpeed * transform.forward;
         transform.position += movementForce * Time.deltaTime;
+    }
+
+    private void ReduceSpeedAndRotationWhileOnAir()
+    {
+        if(!CheckIsGrounded())
+        {
+            movementAccerationRatio = InitMovementAccerationRatio / 3;
+            accerationRotationRatio = InitAccerationRotation / 3;
+            visualRotateMultiplier = InitVisualRotationMultiplier / 4;
+        }
+        else
+        {
+            movementAccerationRatio = InitMovementAccerationRatio;
+        }
     }
 
     private void SpeedUpForwardBackward()
@@ -78,8 +98,18 @@ public class CarController : MonoBehaviour
             currentSpeed -= slowingRatio * Time.deltaTime;
             IsMovingBackWard = true;
         }
+        
+    }
 
+    private void Braking()
+    {
+        if(brakeInput == 1)
+        {
+            if(currentSpeed <= 0) return;
 
+            brakeRatio = (currentSpeed / slowingRatio) * brakeRatioMultiplier;
+            currentSpeed -= brakeRatio * Time.deltaTime;
+        }   
     }
 
     private void CalculateNoGasInputSlowDown()
@@ -113,13 +143,13 @@ public class CarController : MonoBehaviour
             return;
         }
 
-        if(currentSpeed <= currentSpeed / 2)
+        if(currentSpeed <= maxSpeed / 2)
         {
             accerationRotationRatio = InitAccerationRotation;
             visualRotateMultiplier = InitVisualRotationMultiplier;
         }
 
-        if(currentSpeed >= currentSpeed / 2)
+        if(currentSpeed >= maxSpeed / 2)
         {
             accerationRotationRatio = InitAccerationRotation / 2;
             visualRotateMultiplier = InitVisualRotationMultiplier / 2;
@@ -127,25 +157,6 @@ public class CarController : MonoBehaviour
         
     }
     
-    private void Drifting()
-    {
-        if(Input.GetKey(KeyCode.Space))
-        {
-            drifting = true;
-            float additiveRotateAngle = Vector3.Dot(movementForce.magnitude * transform.forward,transform.right);
-            transform.Translate(Vector3.one * additiveRotateAngle,Space.Self); 
-            //transform.Rotate(directionInput * additiveRotateAngle * Time.deltaTime * transform.up);
-            //movementForce = Vector3.Lerp(movementForce.normalized,transform.forward,1 * Time.deltaTime) * movementForce.magnitude;
-            //transform.Rotate(Vector3.up * directionInput * moveForce.magnitude * Time.deltaTime * driftForceMultiplier);
-            Debug.Log(additiveRotateAngle);
-        }   
-
-        if(Input.GetKeyUp(KeyCode.Space))
-        {
-            drifting = false;
-        }
-    }
-
     private void BodyRotation()
     {
         if(directionInput > 0)
@@ -170,22 +181,26 @@ public class CarController : MonoBehaviour
         foreach (var item in visualObjects)
         {   
             item.transform.localRotation = Quaternion.Euler(0, Mathf.LerpAngle(item.transform.localEulerAngles.y,(directionInput * visualRotateMultiplier),visualRotationAngleSpeed), 0);
-            //item.transform.rotation = Quaternion.Lerp(item.transform.rotation,Quaternion.Euler(0,directionMultiplier * directionInput + item.transform.eulerAngles.y,0),  Time.deltaTime);
-            //item.transform.eulerAngles = new Vector3(transform.eulerAngles.x,transform.eulerAngles.y + directionMultiplier * directionInput, transform.eulerAngles.z);
-            //item.transform.rotation = Quaternion.AngleAxis(directionMultiplier, Vector3.);
-            //item.transform.rotation = Quaternion.LookRotation(transform.forward * 15,Vector3.up);
-            //item.transform.rotation = Quaternion.Slerp(item.transform.rotation,Quaternion.Euler(0,directionMultiplier,0), 3);
-            //item.transform.localEulerAngles = new Vector3(item.transform.localEulerAngles.x,Mathf.LerpAngle(item.transform.localEulerAngles.y, -20f, 20f),item.transform.localEulerAngles.z);
-            //item.transform.rotation *= Quaternion.Euler(0, Mathf.LerpAngle(item.transform.rotation.y,directionInput * directionMultiplier,0.2f),0);
-            
-            
+
             if(directionInput == 0)
             {
                 item.transform.localRotation = Quaternion.Euler(0, Mathf.LerpAngle(item.transform.localEulerAngles.y,0,visualRotationAngleSpeed), Time.deltaTime);
             }
         }
 
+    }
 
+    private bool CheckIsGrounded()
+    {
+        RaycastHit hit;
+        return IsGrounded = Physics.Raycast(transform.position + new Vector3(0,0.5f,0),Vector3.down, out hit, raycastDistance,layer);
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.green;
+        Vector3 endPosition = transform.position + Vector3.down ;
+        Gizmos.DrawLine(transform.position + new Vector3(0,0.5f,0), endPosition);
     }
 
     private void ClampCurrentMaxSpeed()
@@ -199,7 +214,4 @@ public class CarController : MonoBehaviour
             currentSpeed = Mathf.Clamp(currentSpeed,maxRSpeed,currentSpeed);
         }
     }
-
-
-
 }
