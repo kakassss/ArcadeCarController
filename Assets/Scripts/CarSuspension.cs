@@ -8,11 +8,10 @@ public class CarSuspension : MonoBehaviour
   
     [SerializeField] private float maxForce;
     [SerializeField] private float maxDistance;
-
-
     [SerializeField] private float gravityMultiplier;
 
     private Rigidbody rigidbody;
+    
     private void Start()
     {
         rigidbody = GetComponent<Rigidbody>();

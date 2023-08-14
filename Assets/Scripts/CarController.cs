@@ -4,20 +4,21 @@ using UnityEngine;
 
 public class CarController : MonoBehaviour
 {
-    [Header("Forward Transform Movement")]
+    [Header("Forward Transform/Braking Movement")]
     [SerializeField] private float maxSpeed;
     [SerializeField] private float maxRSpeed;
     [SerializeField] private float movementAccerationRatio;
     [SerializeField] private float slowingRatio;
     [SerializeField] private float brakeRatioMultiplier;
-    [SerializeField] private float driftForceMultiplier;
+
     private Vector3 movementForce;
+
     private float brakeRatio;
     private float currentSpeed = 0f;
     private float InitMovementAccerationRatio;
+
     private bool IsMovingForward;
     private bool IsMovingBackWard;
-    [SerializeField] private bool IsGrounded;
 
     [Header("Inputs")]
     private float gasInput;
@@ -25,10 +26,11 @@ public class CarController : MonoBehaviour
     private float brakeInput;
 
     [Header("Rotation Movement")]
-
     private const int minRequiredRotationSpeed = -2;
     private const int maxRequiredRotationSpeed = 2;
+
     [SerializeField] List<GameObject> visualObjects;
+
     [SerializeField] private float visualRotateMultiplier = 15f;
     [SerializeField] private float visualRotationAngleSpeed;
     [SerializeField] private float accerationRotationRatio;
@@ -41,6 +43,8 @@ public class CarController : MonoBehaviour
     [Header("Grounded")]
     [SerializeField] private float raycastDistance = 1.0f;
     [SerializeField] private LayerMask layer;
+    [SerializeField] private bool IsGrounded;
+
     private void Start()
     {
         InitAccerationRotation = accerationRotationRatio;
@@ -50,9 +54,7 @@ public class CarController : MonoBehaviour
 
     private void Update()
     {
-        gasInput = Input.GetAxis("Vertical");
-        directionInput = Input.GetAxisRaw("Horizontal");
-        brakeInput = Input.GetAxisRaw("Jump");
+        GetInputs();
 
         ClampCurrentMaxSpeed();
         CalculateRotationBasedOnCurrentSpeed();
@@ -63,6 +65,13 @@ public class CarController : MonoBehaviour
         Braking();
         BodyRotation();
         VisualRotation();
+    }
+
+    private void GetInputs()
+    {
+        gasInput = Input.GetAxis("Vertical");
+        directionInput = Input.GetAxisRaw("Horizontal");
+        brakeInput = Input.GetAxisRaw("Jump");
     }
 
     private void Movement()
@@ -111,6 +120,7 @@ public class CarController : MonoBehaviour
             currentSpeed -= brakeRatio * Time.deltaTime;
         }   
     }
+
 
     private void CalculateNoGasInputSlowDown()
     {
@@ -161,11 +171,11 @@ public class CarController : MonoBehaviour
     {
         if(directionInput > 0)
         {
-            Rotating(1); 
+            Rotating(1); //Right Direction
         }
         if(directionInput < 0)
         {
-            Rotating(-1);
+            Rotating(-1); //Left Direction
         }
 
         void Rotating(float direction)
