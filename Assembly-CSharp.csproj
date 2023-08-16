@@ -41,8 +41,17 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Scripts\CarSuspension.cs" />
+     <Compile Include="Assets\Scripts\RefactoredSystem\Features\CarRotation.cs" />
+     <Compile Include="Assets\Scripts\RefactoredSystem\ClassDatas\CarInputData.cs" />
      <Compile Include="Assets\Scripts\CarController.cs" />
+     <Compile Include="Assets\Scripts\RefactoredSystem\ClassDatas\CarRotationData.cs" />
+     <Compile Include="Assets\Scripts\RefactoredSystem\Features\CarMovement.cs" />
      <Compile Include="Assets\TutorialInfo\Scripts\Readme.cs" />
+     <Compile Include="Assets\Scripts\RefactoredSystem\IEngineTick.cs" />
+     <Compile Include="Assets\Scripts\RefactoredSystem\Abstract\CarEngine.cs" />
+     <Compile Include="Assets\Scripts\RefactoredSystem\ClassDatas\CarMovementData.cs" />
+     <Compile Include="Assets\Scripts\RefactoredSystem\CarEngineManager.cs" />
+     <Compile Include="Assets\Scripts\RefactoredSystem\Features\CarInputs.cs" />
     <Reference Include="UnityEngine">
         <HintPath>C:\Program Files\Unity\Hub\Editor\2022.2.15f1\Editor\Data\Managed\UnityEngine\UnityEngine.dll</HintPath>
     </Reference>

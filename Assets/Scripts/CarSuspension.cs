@@ -23,7 +23,7 @@ public class CarSuspension : MonoBehaviour
         ApplyGravity();
     }
 
-    private void SuspansionBehaviour()
+    private void SuspansionBehaviour() // Currently not working as it should
     {
 
         foreach (var spring in springs) 
