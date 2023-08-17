@@ -1,11 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class CarEngineManager : MonoBehaviour
 {
-    
-    [HideInInspector] public CarInputData carInput;
+    public CarInputData carInput;
     public CarMovementData carMovement;
     public CarRotationData carRotation;
+    public CarGroundData carGroundData;
+
 }

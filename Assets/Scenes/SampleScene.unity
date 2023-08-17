@@ -419,7 +419,9 @@ GameObject:
   - component: {fileID: 112543183}
   - component: {fileID: 112543182}
   - component: {fileID: 112543181}
+  - component: {fileID: 112543187}
   - component: {fileID: 112543180}
+  - component: {fileID: 112543186}
   m_Layer: 0
   m_Name: CarNew
   m_TagString: Untagged
@@ -439,12 +441,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40888294c49ecf941b0a65041e3fc1bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  carInput:
+    gasInput: 0
+    directionInput: 0
+    brakeInput: 0
   carMovement:
-    maxSpeed: 0
-    maxRSpeed: 0
-    movementAccerationRatio: 0
-    slowingRatio: 0
-    brakeRatioMultiplier: 0
+    maxSpeed: 66
+    maxRSpeed: -5
+    movementAccerationRatio: 33
+    slowingRatio: 15
+    brakeRatioMultiplier: 8
     movementForce: {x: 0, y: 0, z: 0}
     brakeRatio: 0
     currentSpeed: 0
@@ -452,14 +458,25 @@ MonoBehaviour:
     IsMovingForward: 0
     IsMovingBackWard: 0
   carRotation:
-    visualObjects: []
-    visualRotateMultiplier: 15
-    visualRotationAngleSpeed: 0
-    accerationRotationRatio: 0
+    visualObjects:
+    - {fileID: 1192932220}
+    - {fileID: 2700191}
+    - {fileID: 1672407757}
+    visualRotateMultiplier: 30
+    visualRotationAngleSpeed: 0.05
+    accerationRotationRatio: 120
+    minRequiredRotationSpeed: -2
+    maxRequiredRotationSpeed: 2
     InitAccerationRotation: 0
     InitVisualRotationMultiplier: 0
     currentRotation: {x: 0, y: 0, z: 0, w: 0}
     currentRotationAngle: 0
+  carGroundData:
+    raycastDistance: 1
+    layer:
+      serializedVersion: 2
+      m_Bits: 4294967295
+    IsGrounded: 0
 --- !u!114 &112543181
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -550,6 +567,38 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &112543186
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 112543179}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 876b7154d88dde64e9364b26190a6654, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  springs:
+  - {fileID: 7592607753411793528}
+  - {fileID: 4867946285401279732}
+  - {fileID: 6469154636862790946}
+  - {fileID: 5289885217085235255}
+  maxForce: 15000
+  maxDistance: 0.5
+  gravityMultiplier: 2
+--- !u!114 &112543187
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 112543179}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e47a769092df7aa4ba0dda69eeb1a4ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &330585543
 GameObject:
   m_ObjectHideFlags: 0
@@ -638,7 +687,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
   m_LocalRotation: {x: 0.2616541, y: 0, z: 0, w: 0.96516174}
-  m_LocalPosition: {x: -154.6, y: 8.07, z: -202.39}
+  m_LocalPosition: {x: -149.86, y: 8.07, z: -202.39}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -33432,7 +33481,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh27840
+  m_Name: pb_Mesh27918
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -33626,8 +33675,8 @@ MonoBehaviour:
   m_StreamingVersion: 20170927
   m_Priority: 10
   m_StandbyUpdate: 2
-  m_LookAt: {fileID: 5297117052485424168}
-  m_Follow: {fileID: 5297117052485424168}
+  m_LookAt: {fileID: 112543185}
+  m_Follow: {fileID: 112543185}
   m_Lens:
     FieldOfView: 88.7
     OrthographicSize: 5
@@ -33655,7 +33704,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1818219796}
   m_LocalRotation: {x: 0.2616541, y: 0, z: 0, w: 0.96516174}
-  m_LocalPosition: {x: -154.6, y: 8.07, z: -202.39}
+  m_LocalPosition: {x: -149.86, y: 8.07, z: -202.39}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

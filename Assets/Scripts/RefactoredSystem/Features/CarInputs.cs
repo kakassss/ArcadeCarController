@@ -4,16 +4,27 @@ using UnityEngine;
 
 public class CarInputs : CarEngine
 {
+    private CarInputData inputData;
+    protected void Awake()
+    {
+        base.Awake();
+        
+        inputData = engineManager.carInput;
+    }
 
     protected override void Start()
     {
-        engineLoops.Add(this);
+        
+    }
+    protected override void Update()
+    {
+        EngineTick();
     }
 
     public override void EngineTick()
     {
-        engineManager.carInput.gasInput = Input.GetAxis("Vertical");
-        engineManager.carInput.directionInput = Input.GetAxisRaw("Horizontal");
-        engineManager.carInput.brakeInput = Input.GetAxisRaw("Jump");
+        inputData.gasInput = Input.GetAxis("Vertical");
+        inputData.directionInput = Input.GetAxisRaw("Horizontal");
+        inputData.brakeInput = Input.GetAxisRaw("Jump");
     }
 }

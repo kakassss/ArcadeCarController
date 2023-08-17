@@ -9,8 +9,8 @@ public class CarRotationData
     public float visualRotateMultiplier = 15f;
     public float visualRotationAngleSpeed;
     public float accerationRotationRatio;
-    [HideInInspector] public const int minRequiredRotationSpeed = -2;
-    [HideInInspector] public const int maxRequiredRotationSpeed = 2;
+    [HideInInspector] public int minRequiredRotationSpeed = -2;
+    [HideInInspector] public int maxRequiredRotationSpeed = 2;
 
 
     [HideInInspector] public float InitAccerationRotation;

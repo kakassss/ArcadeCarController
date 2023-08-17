@@ -51,6 +51,7 @@
      <Compile Include="Assets\Scripts\RefactoredSystem\Abstract\CarEngine.cs" />
      <Compile Include="Assets\Scripts\RefactoredSystem\ClassDatas\CarMovementData.cs" />
      <Compile Include="Assets\Scripts\RefactoredSystem\CarEngineManager.cs" />
+     <Compile Include="Assets\Scripts\RefactoredSystem\ClassDatas\CarGroundData.cs" />
      <Compile Include="Assets\Scripts\RefactoredSystem\Features\CarInputs.cs" />
     <Reference Include="UnityEngine">
         <HintPath>C:\Program Files\Unity\Hub\Editor\2022.2.15f1\Editor\Data\Managed\UnityEngine\UnityEngine.dll</HintPath>

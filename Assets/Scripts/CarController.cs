@@ -59,7 +59,7 @@ public class CarController : MonoBehaviour
         ClampCurrentMaxSpeed();
         CalculateRotationBasedOnCurrentSpeed();
         ReduceSpeedAndRotationWhileOnAir();
-        CalculateNoGasInputSlowDown();
+        CalculateNoInputSlowDown();
         SpeedUpForwardBackward();
         Movement();
         Braking();
@@ -122,7 +122,7 @@ public class CarController : MonoBehaviour
     }
 
 
-    private void CalculateNoGasInputSlowDown()
+    private void CalculateNoInputSlowDown()
     {
         if(gasInput == 0 && IsMovingForward)
         {
